@@ -205,3 +205,22 @@ span {
 .redes-sociais img {
     margin: 0px 15px 0px 15px;
 }
+
+.informacao-pagina nav div:first-child {
+    display: none;
+}
+
+.informacao-pagina nav > div:last-child div:last-child > span {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.informacao-pagina nav > div:last-child div:last-child a {
+    width: 20px;
+}
+
+.informacao-pagina nav > div:last-child div:last-child a svg {
+    width: 100%;
+}
