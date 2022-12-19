@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\ProdutoDetalheController;
 use App\Http\Controllers\SobreNosController;
 use App\Http\Controllers\TesteController;
 
@@ -45,8 +46,10 @@ Route::middleware('autenticacao:ldap,visitante')->prefix('/app')->group(function
     Route::get('/fornecedor/editar/{id}/{msg?}', [FornecedorController::class, 'editar'])->name('app.fornecedor.editar');
     Route::get('/fornecedor/excluir/{id}', [FornecedorController::class, 'excluir'])->name('app.fornecedor.excluir');
 
-    // Route::get('/produto', [ProdutoController::class, 'index'])->name('app.produto');
+    // produto
     Route::resource('produto', ProdutoController::class);
+    // produtos detalhes
+    Route::resource('produto-detalhe', ProdutoDetalheController::class);
 });
 
 Route::get('/teste/{p1}/{p2}', [TesteController::class, 'teste'])->name('teste');
