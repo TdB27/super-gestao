@@ -92,4 +92,12 @@ class FornecedorController extends Controller
             'msg' => $msg
         ]);
     }
+
+    public function excluir($id)
+    {
+        Fornecedor::find($id)->delete();
+        // Fornecedor::find($id)->forceDelete();
+
+        return redirect()->route('app.fornecedor');
+    }
 }
