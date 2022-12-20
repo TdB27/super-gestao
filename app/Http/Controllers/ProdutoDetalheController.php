@@ -62,7 +62,8 @@ class ProdutoDetalheController extends Controller
      */
     public function edit($id)
     {
-        $produtoDetalhe = ItemDetalhe::find($id);
+        // eager loading - faz o relacionamento ansioso... por padrão o lazy loading (carragemento tardio) faz o relacionamento somente quando o método for chamado
+        $produtoDetalhe = ItemDetalhe::with(['item'])->find($id);
         $unidades = Unidade::all();
         return view('app.produto_detalhe.edit', ['produto_detalhe' => $produtoDetalhe, 'unidades' => $unidades]);
     }
