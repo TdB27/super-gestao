@@ -9,11 +9,16 @@ class Item extends Model
 {
     use HasFactory;
     protected $table = 'produtos';
-    protected $fillable = ['nome', 'descricao', 'peso', 'unidade_id'];
+    protected $fillable = ['fornecedor_id', 'nome', 'descricao', 'peso', 'unidade_id'];
 
     public function itemDetalhe()
     {
         // utilizando o hasOne com nomes não padronizados no db
         return $this->hasOne('App\Models\ItemDetalhe', 'produto_id', 'id');
+    }
+
+    public function fornecedor()
+    {
+        return $this->belongsTo('App\Models\Fornecedor', 'fornecedor_id', 'id');
     }
 }

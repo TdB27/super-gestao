@@ -18,7 +18,7 @@ class ProdutoController extends Controller
     public function index(Request $request)
     {
         // eager loading - faz o relacionamento ansioso... por padrão o lazy loading (carragemento tardio) faz o relacionamento somente quando o método for chamado
-        $produtos = Item::with(['itemDetalhe'])->paginate(10);
+        $produtos = Item::with(['itemDetalhe', 'fornecedor'])->paginate(10);
 
         return view('app.produto.index', [
             'titulo' => "Produtos",
