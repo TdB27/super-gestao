@@ -43,19 +43,38 @@ class PedidoProdutoController extends Controller
     public function store(Request $request, Pedido $pedido)
     {
         $regras = [
-            'produto_id' => 'exists:produtos,id'
+            'produto_id' => 'exists:produtos,id',
+            'quantidade' => 'required'
         ];
 
         $feedback = [
-            'produto_id.exists' => 'O produto informado não existe'
+            'produto_id.exists' => 'O produto informado não existe',
+            'required' => 'O campo :attribute deve possuir um valor válido'
         ];
 
         $request->validate($regras, $feedback);
 
-        $pedidoProduto = new PedidoProduto();
-        $pedidoProduto->pedido_id = $pedido->id;
-        $pedidoProduto->produto_id = $request->get('produto_id');
-        $pedidoProduto->save();
+        // ------------- MODO CONVENCIONAL
+        // $pedidoProduto = new PedidoProduto();
+        // $pedidoProduto->pedido_id = $pedido->id;
+        // $pedidoProduto->produto_id = $request->get('produto_id');
+        // $pedidoProduto->quantidade  = $request->get('quantidade');
+        // $pedidoProduto->save();
+
+        // ------------- MODO ATTACH
+        // insere os dados na tabela relacional de modo dinâmico
+        // $pedido->produtos // são os registros do relacionamento
+        // $pedido->produtos() // é o obj
+        $pedido->produtos()->attach(
+            $request->get('produto_id'),
+            ['quantidade' => $request->get('quantidade')]
+        );
+        // outra forma de se fazer isso
+        // $pedido->produtos()->attach(
+        //     [
+        //         $request->get('produto_id') => ['quantidade' => $request->get('quantidade')]
+        //     ]
+        // );
 
         return redirect()->route('pedido-produto.create', ['pedido' => $pedido->id]);
     }
@@ -100,8 +119,24 @@ class PedidoProdutoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Pedido $pedido, Produto $produto)
     {
-        //
+        print_r($pedido->getAttributes());
+        echo '<hr>';
+        print_r($produto->getAttributes());
+
+        // ----------- MODO CONVENCIONAL
+        // PedidoProduto::where([
+        //     'pedido_id' => $pedido->id,
+        //     'produto_id' => $produto->id,
+        // ])->delete();
+
+        // ----------- MODO DETACH
+        // permite fazer a exclusão pelo relacionamento que foi implementado no MODEL
+        $pedido->produtos()->detach($produto->id);
+        // OU
+        // $produto->pedidos()->detach($pedido->id);
+
+        return redirect()->route('pedido-produto.create', ['pedido' => $pedido->id]);
     }
 }
